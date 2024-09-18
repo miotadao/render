@@ -1,0 +1,21 @@
+databases:
+  - name: render_DB
+    databaseName: render_db_dw3u
+    user: render
+    region: singapore
+
+services:
+  - type: web
+    name: render
+    env: ruby
+    region: singapore
+    plan: free
+    buildCommand: "./bin/render-build.sh"
+    startCommand: "bundle exec puma -C config/puma.rb"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: render_DB
+          property: connectionString
+      - key: RAILS_MASTER_KEY
+        sync: false
